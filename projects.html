@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PROJECTS</title>
+<style>
+  body {
+    font-family: 'Times New Roman', serif;
+    margin: 0;
+    padding: 0;
+  }
+
+  .container {
+    width: 80%;
+    margin: 0 auto; /* Center align the container */
+  }
+
+  img, iframe {
+    display: block;
+    margin: 0 auto; /* Center align images and iframes */
+  }
+
+  .dropdown-heading {
+    text-align: left;
+    margin-left: 20px;
+    cursor: pointer;
+    position: relative;
+    padding-right: 20px; /* Make space for the triangle */
+  }
+
+  .dropdown-heading::after {
+    content: '▶'; /* Triangle pointing to the right */
+    font-size: 0.8em;
+    position: absolute;
+    right: 0;
+    top: 0;
+    transition: transform 0.3s ease;
+  }
+
+  .dropdown-content {
+    display: none;
+    text-align: left;
+    margin-left: 20px;
+  }
+
+  .active::after {
+    transform: rotate(90deg); /* Rotate triangle 90 degrees */
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h1>For Hosting,Documenting And Planning Any And Every Project I Build</h1>
+
+  <h1 class="dropdown-heading">TINY GPU</h1>
+  <div class="dropdown-content">
+    <p>A fork of the Tiny-GPU repo made by <a href="https://twitter.com/MajmudarAdam " target="_blank">@MajmudarAdam</a> I am following his viral <a href="https://twitter.com/MajmudarAdam/status/1773869330700361789
+        " target="_blank">twitter thred</a> about building a gpu from scratch</p>
+        <a href="https://github.com/virajitgp/tiny-gpu-ryu" target="_blank">GitHUB repo(fork)</a>
+  </div>
+
+   <h1 class="dropdown-heading">MICROGRAD</h1>
+   <div class="dropdown-content">
+<p>fork of <a href="https://twitter.com/karpathy?lang=en" target="_blank">@karpathy
+</a> GitHUB repo callled micrograd i'm trying to figure out how a llm works from the first principles by following along with one the the worlds best ai researcher </p>
+   <a href="https://github.com/karpathy/micrograd" target="_blank">GitHUB repo(fork)</a>
+
+   
+
+   </div>
+</div>
+
+<script>
+  // Get all the elements with the dropdown-heading class
+  var dropdowns = document.querySelectorAll('.dropdown-heading');
+
+  // Add click event listener to each heading
+  dropdowns.forEach(function(dropdown) {
+    dropdown.onclick = function() {
+      // Get the next element which is the content to show/hide
+      var content = this.nextElementSibling;
+
+      // Toggle the display property between none and block
+      content.style.display = content.style.display === 'block' ? 'none' : 'block';
+
+      // Toggle the active class on the heading
+      this.classList.toggle('active');
+    };
+  });
+</script>
+
+</body>
+</html>

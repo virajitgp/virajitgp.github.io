@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LEARNING</title>
+<style>
+  body {
+    font-family: 'Times New Roman', serif;
+    margin: 0;
+    padding: 0;
+  }
+
+  .container {
+    width: 80%;
+    margin: 0 auto; /* Center align the container */
+  }
+
+  img, iframe {
+    display: block;
+    margin: 0 auto; /* Center align images and iframes */
+  }
+
+  .dropdown-heading {
+    text-align: left;
+    margin-left: 20px;
+    cursor: pointer;
+    position: relative;
+    padding-right: 20px; /* Make space for the triangle */
+  }
+
+  .dropdown-heading::after {
+    content: '▶'; /* Triangle pointing to the right */
+    font-size: 0.8em;
+    position: absolute;
+    right: 0;
+    top: 0;
+    transition: transform 0.3s ease;
+  }
+
+  .dropdown-content {
+    display: none;
+    text-align: left;
+    margin-left: 20px;
+  }
+
+  .active::after {
+    transform: rotate(90deg); /* Rotate triangle 90 degrees */
+  }
+</style>
+</head>
+<body>
+<h1>Writing Down Any Idea Or Intrest That I Am Currently Working On Or Plan To Work On</h1>
+  <h1 class="dropdown-heading">learning now</h1>
+  <div class="dropdown-content">
+    <ul>
+    <li><a href="https://www.theodinproject.com/" target="_blank">Odin Project</a></li>
+    <li>Building a GPT from first principles using verlilog</li>    
+    <li>How llm's work by <a href="https://www.youtube.com/watch?v=zjkBMFhNj_g&t=747s" target="_blank">karpathy's</a> video</li>    
+    <li>linear Algerbra from <a href="https://www.youtube.com/watch?v=fNk_zzaMoSs&list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab" target="_blank">3blue1brown's course</a></li>    
+    </ul>
+  </div>
+
+   <h1 class="dropdown-heading">plan on learning</h1>
+   <div class="dropdown-content">
+<ul>
+<li>Neural Networks from <a href="https://www.youtube.com/playlist?list=PLAqhIrjkxbuWI23v9cThsA9GvCAUhRvKZ" target="_blank">karpathy's playlist</a></li>
+<li>Diffusion Models</li>
+<li>Model Finetuning</li>
+<li>Building Computetr Vision projects using OpenCV</li>
+<li>Reverse Engineering from <a href="https://github.com/virajitgp/awesome-reversing-ryu" target="_blank">awesome-reversing-ryu(A Fork)</a></li>
+<li>Making a Physics Engine using C++ <a href="https://allenchou.net/game-physics-series/" target="_blank">allen chou's guilde</a></li>
+<li>Read and understand more about nuclear energy espically <a href="https://www.helionenergy.com/" target="_blank">Helion Energy</a></li>
+</ul>
+
+   </div>
+</div>
+
+<script>
+  // Get all the elements with the dropdown-heading class
+  var dropdowns = document.querySelectorAll('.dropdown-heading');
+
+  // Add click event listener to each heading
+  dropdowns.forEach(function(dropdown) {
+    dropdown.onclick = function() {
+      // Get the next element which is the content to show/hide
+      var content = this.nextElementSibling;
+
+      // Toggle the display property between none and block
+      content.style.display = content.style.display === 'block' ? 'none' : 'block';
+
+      // Toggle the active class on the heading
+      this.classList.toggle('active');
+    };
+  });
+</script>
+
+</body>
+</html>

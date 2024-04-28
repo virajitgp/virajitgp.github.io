@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ABOUT</title>
+<style>
+  body {
+    font-family: 'Times New Roman', serif;
+    margin: 0;
+    padding: 0;
+  }
+
+  .container {
+    width: 80%;
+    margin: 0 auto; /* Center align the container */
+  }
+
+  img, iframe {
+    display: block;
+    margin: 0 auto; /* Center align images and iframes */
+  }
+
+  .dropdown-heading {
+    text-align: left;
+    margin-left: 20px;
+    cursor: pointer;
+    position: relative;
+    padding-right: 20px; /* Make space for the triangle */
+  }
+
+  .dropdown-heading::after {
+    content: '▶'; /* Triangle pointing to the right */
+    font-size: 0.8em;
+    position: absolute;
+    right: 0;
+    top: 0;
+    transition: transform 0.3s ease;
+  }
+
+  .dropdown-content {
+    display: none;
+    text-align: left;
+    margin-left: 20px;
+  }
+
+  .active::after {
+    transform: rotate(90deg); /* Rotate triangle 90 degrees */
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <iframe width="560" height="320" src="https://www.youtube.com/embed/kYfNvmF0Bqw?si=37rOkw849aanB9qO" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+  <h1 class="dropdown-heading">ABOUT ME</h1>
+  <div class="dropdown-content">
+    <p>Hi, my name is virajit i'm 19 y/o as of writing this</p>
+    <P>i've had a pc for as long as i can remember cause of that i've spent most of my life hacking around,trying to build stuff(and failing alot while in the process)</P>
+    <P>and i still plan on continuing to build cause i belive that the natural entropy of the economic machine rewards risk takers,builders.and hackers</P>
+  </div>
+
+  <h1 class="dropdown-heading">BELIEFS</h1>
+  <div class="dropdown-content">
+    <a href="https://www.effectiveacceleration.org/" target="_blank">E/ACC</a>
+    <P>The only way to solve humanites greatest problems is by outgrowing them,any technologgical revolution has always improved humanity.</P>
+    <a href="https://a16z.com/the-techno-optimist-manifesto/" target="_blank">TECHNO OPTIMIST MANIFESTO</a>
+    <p>technology – new knowledge, new tools, what the Greeks called techne – has always been the main source of growth, and perhaps the only cause of growth, as technology made both population growth and natural resource utilization possible.</p>
+    <h4>CHANGE(Steve Jobs)</h4>
+    <P>Everything around you that you call life was made up by people that were no smarter than you, and you can change it, you can influence it, you can build your own things that other people can use.</P>
+    <a href="https://twitter.com/sama" target="_blank">DELUSION (@sama)</a>
+    <P>Self-belief is immensely powerful. The most successful people I know believe in themselves almost to the point of delusion.</P>
+
+</div>
+     <a href="people.html">INFLUENCES</a>
+</div>
+
+<script>
+  // Get all the elements with the dropdown-heading class
+  var dropdowns = document.querySelectorAll('.dropdown-heading');
+
+  // Add click event listener to each heading
+  dropdowns.forEach(function(dropdown) {
+    dropdown.onclick = function() {
+      // Get the next element which is the content to show/hide
+      var content = this.nextElementSibling;
+
+      // Toggle the display property between none and block
+      content.style.display = content.style.display === 'block' ? 'none' : 'block';
+
+      // Toggle the active class on the heading
+      this.classList.toggle('active');
+    };
+  });
+</script>
+
+</body>
+</html>

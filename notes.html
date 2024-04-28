@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NOTES</title>
+<style>
+  body {
+    font-family: 'Times New Roman', serif;
+    margin: 0;
+    padding: 0;
+  }
+
+  .container {
+    width: 80%;
+    margin: 0 auto; /* Center align the container */
+  }
+
+  img, iframe {
+    display: block;
+    margin: 0 auto; /* Center align images and iframes */
+  }
+
+  .dropdown-heading {
+    text-align: left;
+    margin-left: 20px;
+    cursor: pointer;
+    position: relative;
+    padding-right: 20px; /* Make space for the triangle */
+  }
+
+  .dropdown-heading::after {
+    content: '▶'; /* Triangle pointing to the right */
+    font-size: 0.8em;
+    position: absolute;
+    right: 0;
+    top: 0;
+    transition: transform 0.3s ease;
+  }
+
+  .dropdown-content {
+    display: none;
+    text-align: left;
+    margin-left: 20px;
+  }
+
+  .active::after {
+    transform: rotate(90deg); /* Rotate triangle 90 degrees */
+  }
+</style>
+</head>
+<body>
+
+
+  <h1 class="dropdown-heading">OP IS STILL COOKING</h1>
+  <div class="dropdown-content">
+    <P>OP WILL UPDATE THIS PAGE SOON</p>
+  </div>
+
+  <!-- Repeat for as many dropdowns as you need, each below an image or video -->
+</div>
+
+<script>
+  // Get all the elements with the dropdown-heading class
+  var dropdowns = document.querySelectorAll('.dropdown-heading');
+
+  // Add click event listener to each heading
+  dropdowns.forEach(function(dropdown) {
+    dropdown.onclick = function() {
+      // Get the next element which is the content to show/hide
+      var content = this.nextElementSibling;
+
+      // Toggle the display property between none and block
+      content.style.display = content.style.display === 'block' ? 'none' : 'block';
+
+      // Toggle the active class on the heading
+      this.classList.toggle('active');
+    };
+  });
+</script>
+
+</body>
+</html>
