@@ -3,22 +3,27 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ESSAYS</title>
+<title>BLOG</title>
+<!-- MathJax for LaTeX rendering -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.0/es5/tex-mml-chtml.js"></script>
+<!-- Markdown parser -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.0.2/marked.min.js"></script>
 <style>
   body {
-    font-family: 'Times New Roman', serif;
+    font-family: 'Latin Modern Roman', 'Computer Modern', 'Times New Roman', serif;
     margin: 0;
     padding: 0;
+    line-height: 1.5;
   }
 
   .container {
     width: 80%;
-    margin: 0 auto; /* Center align the container */
+    margin: 0 auto;
   }
 
   img, iframe {
     display: block;
-    margin: 0 auto; /* Center align images and iframes */
+    margin: 0 auto;
   }
 
   .dropdown-heading {
@@ -26,11 +31,11 @@
     margin-left: 20px;
     cursor: pointer;
     position: relative;
-    padding-right: 20px; /* Make space for the triangle */
+    padding-right: 20px;
   }
 
   .dropdown-heading::after {
-    content: '▶'; /* Triangle pointing to the right */
+    content: '▶';
     font-size: 0.8em;
     position: absolute;
     right: 0;
@@ -45,38 +50,270 @@
   }
 
   .active::after {
-    transform: rotate(90deg); /* Rotate triangle 90 degrees */
+    transform: rotate(90deg);
+  }
+
+  /* Styling for blog entries */
+  .blog-entry {
+    margin-bottom: 40px;
+    padding: 20px;
+    border-left: 4px solid #333;
+    background-color: #f9f9f9;
+  }
+
+  .blog-date {
+    color: #777;
+    font-style: italic;
+    margin-bottom: 10px;
+  }
+
+  .blog-title {
+    margin-top: 0;
+    margin-bottom: 15px;
+  }
+
+  .blog-content {
+    line-height: 1.6;
+  }
+
+  /* LaTeX styling */
+  .math {
+    font-family: 'Latin Modern Roman', 'Computer Modern', 'Times New Roman', serif;
+  }
+  
+  /* Code blocks */
+  pre {
+    background-color: #f1f1f1;
+    padding: 10px;
+    border-radius: 5px;
+    overflow-x: auto;
+  }
+  
+  code {
+    font-family: 'Latin Modern Mono', 'Computer Modern Typewriter', monospace;
   }
 </style>
 </head>
 <body>
 
 <div class="container">
-  <
-  <h1 class="dropdown-heading">OP WILL UPDATE SOON</h1>
-  <div class="dropdown-content">
-    <p>OP STILL COOKING</p>
-  </div>
+  <h1>BLOG</h1>
+  <p>My thoughts, explorations, and technical notes on technology, AI, and building things.</p>
+  
+  <div class="blog-entry">
+    <div class="blog-date">March 15, 2025</div>
+    <h2 class="blog-title">Understanding Transformers: The Math Behind Attention</h2>
+    <div class="blog-content" id="blog-1">
+# Understanding Transformers: The Math Behind Attention
 
-  <!-- Repeat for as many dropdowns as you need, each below an image or video -->
+The key innovation in transformer models is the attention mechanism. Let's break down how it works mathematically.
+
+## The Attention Equation
+
+Attention is computed using queries $Q$, keys $K$, and values $V$ as follows:
+
+$$\text{Attention}(Q, K, V) = \text{softmax}\left(\frac{QK^T}{\sqrt{d_k}}\right)V$$
+
+Where:
+- $Q \in \mathbb{R}^{n \times d_k}$ represents the queries
+- $K \in \mathbb{R}^{m \times d_k}$ represents the keys
+- $V \in \mathbb{R}^{m \times d_v}$ represents the values
+- $d_k$ is the dimensionality of the keys
+
+## Why Scale by $\sqrt{d_k}$?
+
+The scaling factor $\sqrt{d_k}$ prevents the dot products from growing too large in magnitude, which could push the softmax function into regions with very small gradients.
+
+## Multi-Head Attention
+
+Multi-head attention allows the model to attend to different parts of the sequence simultaneously:
+
+$$\text{MultiHead}(Q, K, V) = \text{Concat}(\text{head}_1, \ldots, \text{head}_h)W^O$$
+
+Where each head is:
+
+$$\text{head}_i = \text{Attention}(QW_i^Q, KW_i^K, VW_i^V)$$
+
+This structure enables the model to capture different types of dependencies between tokens, leading to more expressive representations.
+
+## Code Example
+
+```python
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+
+class AttentionLayer(nn.Module):
+    def __init__(self, d_model, num_heads):
+        super().__init__()
+        self.d_model = d_model
+        self.num_heads = num_heads
+        self.head_dim = d_model // num_heads
+        
+        self.query = nn.Linear(d_model, d_model)
+        self.key = nn.Linear(d_model, d_model)
+        self.value = nn.Linear(d_model, d_model)
+        self.out = nn.Linear(d_model, d_model)
+        
+    def forward(self, q, k, v, mask=None):
+        batch_size = q.shape[0]
+        
+        # Linear projections and reshape
+        q = self.query(q).view(batch_size, -1, self.num_heads, self.head_dim).transpose(1, 2)
+        k = self.key(k).view(batch_size, -1, self.num_heads, self.head_dim).transpose(1, 2)
+        v = self.value(v).view(batch_size, -1, self.num_heads, self.head_dim).transpose(1, 2)
+        
+        # Calculate attention scores
+        scores = torch.matmul(q, k.transpose(-2, -1)) / (self.head_dim ** 0.5)
+        
+        # Apply mask if provided
+        if mask is not None:
+            scores = scores.masked_fill(mask == 0, -1e9)
+        
+        # Softmax and apply to values
+        attention = F.softmax(scores, dim=-1)
+        output = torch.matmul(attention, v)
+        
+        # Reshape and linear projection
+        output = output.transpose(1, 2).contiguous().view(batch_size, -1, self.d_model)
+        return self.out(output)
+```
+
+The transformer architecture revolutionized NLP and continues to be the foundation for most modern language models.
+    </div>
+  </div>
+  
+  <div class="blog-entry">
+    <div class="blog-date">March 10, 2025</div>
+    <h2 class="blog-title">The Beauty of Euler's Identity</h2>
+    <div class="blog-content" id="blog-2">
+# The Beauty of Euler's Identity
+
+Euler's identity is often regarded as the most beautiful equation in mathematics:
+
+$$e^{i\pi} + 1 = 0$$
+
+This equation combines five fundamental mathematical constants:
+- $e$ (the base of natural logarithms)
+- $i$ (the imaginary unit)
+- $\pi$ (the ratio of a circle's circumference to its diameter)
+- 1 (the multiplicative identity)
+- 0 (the additive identity)
+
+## Why Is It Important?
+
+Euler's identity is a special case of Euler's formula:
+
+$$e^{ix} = \cos(x) + i\sin(x)$$
+
+When $x = \pi$, we get:
+
+$$e^{i\pi} = \cos(\pi) + i\sin(\pi) = -1 + 0 = -1$$
+
+Therefore:
+
+$$e^{i\pi} + 1 = 0$$
+
+This elegant result connects complex analysis, trigonometry, and fundamental constants in a surprisingly compact form.
+
+## Applications in Signal Processing
+
+Euler's formula is fundamental in signal processing, where complex exponentials form the basis for Fourier analysis. Any periodic signal can be represented as a sum of complex exponentials:
+
+$$f(t) = \sum_{n=-\infty}^{\infty} c_n e^{int}$$
+
+This is the essence of how we analyze and process signals in telecommunications, audio engineering, and many other fields.
+
+The mathematics that underpins our digital world is truly beautiful in its elegance and power.
+    </div>
+  </div>
+  
+  <h1 class="dropdown-heading">Add New Blog Post</h1>
+  <div class="dropdown-content">
+    <form id="blog-form">
+      <div>
+        <label for="blog-post-title">Title:</label><br>
+        <input type="text" id="blog-post-title" style="width: 100%;">
+      </div>
+      <div style="margin-top: 10px;">
+        <label for="blog-post-content">Content (Markdown with LaTeX support):</label><br>
+        <textarea id="blog-post-content" style="width: 100%; height: 300px;" placeholder="# Your Title
+
+Write your blog post here. Use markdown for formatting.
+
+You can include LaTeX equations like this:
+$E = mc^2$
+
+Or block equations:
+$$\nabla \times \vec{E} = -\frac{\partial \vec{B}}{\partial t}$$"></textarea>
+      </div>
+      <div style="margin-top: 10px;">
+        <button type="button" id="preview-button">Preview</button>
+        <button type="button" id="submit-button">Submit</button>
+      </div>
+    </form>
+    <div id="preview-area" style="margin-top: 20px; display: none;">
+      <h3>Preview:</h3>
+      <div id="preview-content" class="blog-content"></div>
+    </div>
+  </div>
 </div>
 
 <script>
-  // Get all the elements with the dropdown-heading class
-  var dropdowns = document.querySelectorAll('.dropdown-heading');
-
-  // Add click event listener to each heading
-  dropdowns.forEach(function(dropdown) {
-    dropdown.onclick = function() {
-      // Get the next element which is the content to show/hide
-      var content = this.nextElementSibling;
-
-      // Toggle the display property between none and block
-      content.style.display = content.style.display === 'block' ? 'none' : 'block';
-
-      // Toggle the active class on the heading
-      this.classList.toggle('active');
-    };
+  // Process all markdown blog entries
+  document.addEventListener('DOMContentLoaded', function() {
+    // Process all blog content areas
+    document.querySelectorAll('.blog-content').forEach(function(element) {
+      const markdown = element.innerHTML;
+      element.innerHTML = marked.parse(markdown);
+      
+      // Render LaTeX after markdown is processed
+      MathJax.typeset([element]);
+    });
+    
+    // Set up dropdown functionality
+    var dropdowns = document.querySelectorAll('.dropdown-heading');
+    dropdowns.forEach(function(dropdown) {
+      dropdown.onclick = function() {
+        var content = this.nextElementSibling;
+        content.style.display = content.style.display === 'block' ? 'none' : 'block';
+        this.classList.toggle('active');
+      };
+    });
+    
+    // Preview functionality
+    const previewButton = document.getElementById('preview-button');
+    const previewArea = document.getElementById('preview-area');
+    const previewContent = document.getElementById('preview-content');
+    
+    previewButton.addEventListener('click', function() {
+      const content = document.getElementById('blog-post-content').value;
+      previewContent.innerHTML = marked.parse(content);
+      previewArea.style.display = 'block';
+      
+      // Render LaTeX
+      MathJax.typeset([previewContent]);
+    });
+    
+    // Submit functionality (would normally save to a database)
+    const submitButton = document.getElementById('submit-button');
+    submitButton.addEventListener('click', function() {
+      const title = document.getElementById('blog-post-title').value;
+      const content = document.getElementById('blog-post-content').value;
+      
+      if (!title || !content) {
+        alert('Please provide both title and content');
+        return;
+      }
+      
+      // In a real application, this would send data to a server
+      alert('Blog post submitted! (Note: This is just a demo - the post is not actually saved)');
+      
+      // Clear form
+      document.getElementById('blog-post-title').value = '';
+      document.getElementById('blog-post-content').value = '';
+      previewArea.style.display = 'none';
+    });
   });
 </script>
 
